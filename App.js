@@ -9,6 +9,8 @@ const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P
 
 const motsChercher = ["DOM", "MARDI", "COMPOTE", "BRILLANTS", "PHOTOCOPIER", "ABOUTISSEMENT", "INCOMPREHENSION"]
 
+const pictures = ["../pictures_pendu/1.jpeg", "../pictures_pendu/2.jpeg", "../pictures_pendu/3.jpeg", "../pictures_pendu/4.jpeg", "../pictures_pendu/5.jpeg", "../pictures_pendu/6.jpeg", "../pictures_pendu/7.jpeg"]
+
 
 
 class App extends Component {
@@ -18,10 +20,20 @@ class App extends Component {
     motUnderscored : this.motAleatoire(),
     // Tableau qui récupère la valeur du boutton cliqué
     currentButton : [],
-    // Tableau qui récupére les lettres deja trouvées
-    //matchedWordIndice : [],
+    // Récupère le nombre de tentative
     guesses : 0,
+    // Récupérère le nombre de tentative raté
+    looseGuesses : 0,
+    // Tableau qui récupère les lettre du mots de manière unique
     wordFound : [],
+    // Tableau qui récupère les mauvaises lettres choisies
+    badLetters : [],
+    // lien vers la photo du pendu pour l'image
+    src : '',
+    // Activation du clavier
+    //clickableButton : this.disabledButton,
+    // Valeur du disabled des boutons du clavier
+    clickable : false,
   }
 
   
@@ -75,7 +87,7 @@ class App extends Component {
   // Elle réagit au click sur une lettre
   buttonClicked = lettre => {
     // Récupération des états locaux
-    const { currentButton, guesses, wordFound, motUnderscored } = this.state
+    const { currentButton, guesses, wordFound, motUnderscored, badLetters, looseGuesses } = this.state
 
     //console.log(currentButton.length)
 
@@ -92,13 +104,25 @@ class App extends Component {
         // Ajout de la lettre dans le tableau wordFound
         wordFound.push(lettre)
                   
+      } else { // SINON on met à jours les états locaux suivants
+        this.setState ({  looseGuesses: (looseGuesses + 1), badLetters : [...badLetters, lettre] })
+      }
+
+      // Conditions pour que les boutons du clavier ne soient plus cliquables
+      const condition1 = wordFound.length === this.differentLetter().length
+      const condition2 = badLetters.length === pictures.length - 2
+      // Si l'une des conditions est respectée
+      if ( condition1 || condition2 ) {
+        // Le statut de disabled est mis à jour
+        this.setState({ clickable : true })
       }
   
     //console.log(wordFound)
+    //console.log(badLetters)
 
     // Mise à jours des états locaux
     // Ajout au tableau currentButton la valeur du boutton cliqué
-    // incrémentation du nombre de d'essaies
+    // incrémentation du nombre de tentatives
     this.setState ({ currentButton : [...currentButton, lettre],
                      guesses: (guesses + 1) })
 
@@ -117,22 +141,27 @@ class App extends Component {
   
 }
 
+
   // Arrow function pour garantir le binding
   newGame = () => {
     // Retour à l'état initial
     this.setState({currentButton: [],
                    motUnderscored: this.motAleatoire(), 
+                   looseGuesses : 0,
                    guesses : 0,
                    wordFound : [],
+                   clickable : false,
                   })
   }
 
 
   render() {
-    const { motUnderscored, guesses, wordFound } = this.state
+    const { motUnderscored, guesses, wordFound, badLetters, clickable, looseGuesses } = this.state
 
     // constante qui gère la victoire
     const won = wordFound.length === this.differentLetter().length
+    // constante qui gère la défaite
+    const loose = badLetters.length === pictures.length - 1
 
     return (
 
@@ -151,6 +180,7 @@ class App extends Component {
                             key = {index}
                             // Si la fonction getFeedBackForWord est true, alors le bouton change de couleur
                             feedback = { this.getFeedbackForWord(lettre) ? "grey" : "yellow"}
+                            disabled = { clickable }
                             />
               
               ))}
@@ -160,7 +190,7 @@ class App extends Component {
             <GuessCount guesses = {guesses}/>
           </span>
 
-          <span>
+          <h1>
             {/* Boucle sur le tableau motUnderscored pour gérer l'affichage du mot caché */}
             {motUnderscored.map((lettre, index) => (
               <Mots lettre = {lettre} 
@@ -169,11 +199,16 @@ class App extends Component {
                     key = {index}
                     />
             ))}
+          </h1><br/><br/>
+
+          <span>
+            <img src= {pictures[looseGuesses]} alt="123" width="200px" height= "200px"/>
           </span><br/><br/>
 
           <span>
             {/* Si won est true alors on affiche le message */}
             { won && <h1>GAGNééé !!!</h1> }
+            { loose ? <h1>Perduuuu !!!</h1> : '' }
           </span>
 
           <span>
