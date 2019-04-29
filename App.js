@@ -55,7 +55,7 @@ class App extends Component {
       // l'élément extrait est ajouté au tableau
       usedWord.push(usedLetter)
     }
-    //console.log(usedWord)
+    console.log(usedWord)
 
     return usedWord
   }
@@ -150,6 +150,7 @@ class App extends Component {
                    looseGuesses : 0,
                    guesses : 0,
                    wordFound : [],
+                   badLetters : [],
                    clickable : false,
                   })
   }
