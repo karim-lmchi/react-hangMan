@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
-import './App.css'
-import GuessCount from './GuessCount'
-import ButtonLettre from './ButtonLettre'
-import Mots from './Mots'
+import React, { Component } from 'react';
+import './App.css';
+import GuessCount from './GuessCount';
+import ButtonLettre from './ButtonLettre';
+import Mots from './Mots';
 
 
-const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
-const motsChercher = ["DOM", "MARDI", "COMPOTE", "BRILLANTS", "PHOTOCOPIER", "ABOUTISSEMENT", "INCOMPREHENSION"]
+const motsChercher = ["DOM", "MARDI", "COMPOTE", "BRILLANTS", "PHOTOCOPIER", "ABOUTISSEMENT", "INCOMPREHENSION"];
 
-const pictures = ["../pictures_pendu/1.jpeg", "../pictures_pendu/2.jpeg", "../pictures_pendu/3.jpeg", "../pictures_pendu/4.jpeg", "../pictures_pendu/5.jpeg", "../pictures_pendu/6.jpeg", "../pictures_pendu/7.jpeg"]
+const pictures = ["../pictures_pendu/1.jpeg", "../pictures_pendu/2.jpeg", "../pictures_pendu/3.jpeg", "../pictures_pendu/4.jpeg", "../pictures_pendu/5.jpeg", "../pictures_pendu/6.jpeg", "../pictures_pendu/7.jpeg"];
 
 
 
@@ -55,7 +55,6 @@ class App extends Component {
       // l'élément extrait est ajouté au tableau
       usedWord.push(usedLetter)
     }
-    console.log(usedWord)
 
     return usedWord
   }
@@ -80,16 +79,14 @@ class App extends Component {
       wordDifferentLetters.push(k)
     }
 
-    return wordDifferentLetters
+    return wordDifferentLetters;
   }
 
   // Arrow function pour un binding (garantir le this)
   // Elle réagit au click sur une lettre
   buttonClicked = lettre => {
     // Récupération des états locaux
-    const { currentButton, guesses, wordFound, motUnderscored, badLetters, looseGuesses } = this.state
-
-    //console.log(currentButton.length)
+    const { currentButton, guesses, wordFound, motUnderscored, badLetters, looseGuesses } = this.state;
 
     // test pour .some qui a besoin d'une fonction
     // Récupération de la valeur de la lettre
@@ -116,17 +113,12 @@ class App extends Component {
         // Le statut de disabled est mis à jour
         this.setState({ clickable : true })
       }
-  
-    //console.log(wordFound)
-    //console.log(badLetters)
 
     // Mise à jours des états locaux
     // Ajout au tableau currentButton la valeur du boutton cliqué
     // incrémentation du nombre de tentatives
     this.setState ({ currentButton : [...currentButton, lettre],
                      guesses: (guesses + 1) })
-
-    //console.log(currentButton)
  
   }
 
